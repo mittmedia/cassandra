@@ -64,6 +64,10 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chown -R cassandra:cassandra /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chmod 777 /var/lib/cassandra "$CASSANDRA_CONFIG"
+
+RUN sed -ri -e 's/^(authenticator:).*/\1 PasswordAuthenticator/' -e 's/^(authorizer:).*/\1 CassandraAuthorizer/' /etc/cassandra/cassandra.yaml
+
+
 VOLUME /var/lib/cassandra
 
 # 7000: intra-node communication
